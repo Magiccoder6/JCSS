@@ -13,3 +13,4 @@ Jamaica Clinics Scheduling System.
 1. Install Flash by running the command (**pip install flash**)
 1. Run application by using the following command (**python src/app.py**) 
 1. The App link will be the command terminal example (**http://127.0.0.1**)
+   ![Screenshot 2023-12-18 173156](https://github.com/Magiccoder6/JCSS/assets/70528903/71e1a2b9-48f4-403a-8494-30bb863ea0f6)

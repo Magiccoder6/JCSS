@@ -1,0 +1,13 @@
+DROP TABLE IF EXISTS posts;
+
+CREATE TABLE users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    dob TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    first_name TEXT NOT NULL,
+    last_name TEXT NOT NULL,
+    user_role TEXT NOT NULL,
+    email TEXT NOT NULL,
+    gender TEXT NOT NULL,
+    phone_number TEXT NOT NULL,
+    passcode TEXT NOT NULL
+);

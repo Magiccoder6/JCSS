@@ -10,20 +10,32 @@
     <link rel="icon" href="{{ url_for('static', filename='assets/images/favicon.ico') }}" type="image/x-icon"> <!-- Favicon-->
     <!-- project css file  -->
     <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/ihealth.style.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/plugin/datatables/responsive.dataTables.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/plugin/datatables/dataTables.bootstrap5.min.css') }}">
 </head>
 
 <body>
+    <div id="loading" style="display:none;position: fixed; width: 100%;height: 100%; background-color: rgba(0, 0, 0, 0.433); z-index: 100; text-align: center;">
+        <div class="spinner-grow text-secondary" style="position: relative;top: 50%;" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    <div id="toastr" data-bs-autohide="true" data-bs-delay="3000" style="position: fixed; z-index: 10000000;" class="toast align-items-center text-white bg-success border-0 m-3" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body">
+            <h6 id="message"></h6>
+          </div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
 
 <div id="ihealth-layout" class="theme-tradewind">
 
     <!-- main body area -->
-    <div class="main p-2 py-3 p-xl-5 ">
-        {% block content %}{% endblock %}
-    </div>
+    {% block content %}{% endblock %}
+    
 </div>
 
-<!-- Jquery Core Js -->
-<script src="{{ url_for('static', filename='assets/bundles/libscripts.bundle.js')}}"></script>
 
 </body>
 </html>

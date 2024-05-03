@@ -1,0 +1,1 @@
+UPDATE users SET user_role = 'DOCTOR' WHERE email='julia@gmail.com';

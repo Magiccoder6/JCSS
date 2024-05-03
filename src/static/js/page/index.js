@@ -109,16 +109,16 @@ $(function() {
         var options = {
             series: [{
                 name: 'Cardiologist',
-                data: [45, 25, 44, 23, 25, 41, 32, 25, 22, 65, 22, 29]
+                data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             }, {
                 name: 'Physician',
-                data: [45, 12, 25, 22, 19, 22, 29, 23, 23, 25, 41, 32]
+                data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             }, {
                 name: 'Neurologist',
-                data: [45, 25, 32, 25, 22, 65, 44, 23, 25, 41, 22, 29]
+                data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             }, {
                 name: 'Orthopedic',
-                data: [32, 25, 22, 11, 22, 29, 16, 25, 9, 23, 25, 13]
+                data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             }],
             chart: {
                 type: 'bar',
@@ -242,6 +242,7 @@ $('#calendar').datepicker({
     month = date.getMonth() + 1,
     year =  date.getFullYear();
     
+    
     // display day and month on submit button
     var monthName = months[month - 1];
     $(".request .day").text(monthName + " " + day);
@@ -298,6 +299,9 @@ $('#calendar').datepicker({
     center = $(".owl-stage").find(".center");
     center.prev("div").addClass("center-n");
     center.next("div").addClass("center-n");
+
+    localStorage.setItem("appointmentDate", `${year}/${month}/${day}`)
+    localStorage.setItem("appointmentTime", time)
   }
 });
 
@@ -326,6 +330,8 @@ $(".timepicker").on('click', '.owl-next', function(){
   center = $(".owl-stage").find(".center");
   center.prev("div").addClass("center-n");
   center.next("div").addClass("center-n");
+
+  localStorage.setItem("appointmentTime", time)
 });
 
 $(".timepicker").on('click', '.owl-prev', function(){
@@ -336,6 +342,8 @@ $(".timepicker").on('click', '.owl-prev', function(){
   center = $(".owl-stage").find(".center");
   center.prev("div").addClass("center-n");
   center.next("div").addClass("center-n");
+
+  localStorage.setItem("appointmentTime", time)
 });
 
 $('.owl').owlCarousel({

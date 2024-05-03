@@ -37,3 +37,5 @@ export function callAPI(requestType, endpoint, formData){
         xhr.send(new URLSearchParams(formData).toString());
     });
 }
+
+export const STATUS = ['PENDING','ADMIT','INPROGRESS','DISCHARGE']

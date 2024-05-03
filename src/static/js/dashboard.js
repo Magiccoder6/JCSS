@@ -15,5 +15,20 @@ document.addEventListener('DOMContentLoaded', function() {
             showToast(e, 'danger')
         })
     });
+
+    if(document.getElementById('appointment_form')!=null){
+        document.getElementById('appointment_form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+            formData.append('date', `${localStorage.getItem('appointmentDate')} ${localStorage.getItem('appointmentTime')} GMT`)
+    
+            callAPI('POST', '/api/dashboard/add_appoinment', formData).then((data)=>{
+                showToast(data.message, 'success')
+            }).catch((e)=>{
+                showToast(e, 'danger')
+            })
+        });
+    }
+    
     
 });

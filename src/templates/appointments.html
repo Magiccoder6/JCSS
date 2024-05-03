@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block title %}Appointments{% endblock %}
+{% block content %}
+
+{% include 'shared/sidebar.html'%}
+    
+    <div class="main px-lg-4 px-md-4">
+        {% include 'shared/header.html'%}
+        <!-- Body: Body -->
+        <div class="body d-flex py-3">
+            <div class="container-xxl">
+                <div class="row align-items-center">
+                    <div class="border-0 mb-4">
+                        <div class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
+                            <h3 class="fw-bold mb-0">Appointments</h3>
+                        </div>
+                    </div>
+                </div> <!-- Row end  -->
+                <div class="row mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <table id="patient-table" class="table table-hover align-middle mb-0" style="width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Patients</th>
+                                        <th>Requested Date</th>
+                                        <th>Age</th>
+                                        <th>Admited</th>
+                                        <th>Discharge</th>
+                                        <th>Progress</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for a in data %}
+                                    <tr>
+                                        <td>{{a.id}}</td>
+                                        <td><img src="{{url_for('static', filename='assets/images/profile.png')}}" class="avatar  rounded-circle me-2" alt="profile-image"><span>{{a.patient_name}} </span></td>
+                                        <td>{{a.schedule_date}}</td>
+                                        <td>{{a.age}}</td>
+                                        <td>{{a.date_admitted}}</td>
+                                        <td>{{a.date_discharged}}</td>
+                                        <td>
+                                            <div class="progress" style="height: 3px;">
+                                                <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow={{a.progress}} aria-valuemin="0" aria-valuemax="100" {{a.style_width}}> <span class="sr-only">{{a.progress}}% Complete</span> </div>
+                                            </div>
+                                        </td>
+                                        <td><span class="badge bg-info">{{a.status}}</span></td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+    </div>
+    
+
+<!-- Jquery Core Js -->
+<script src="{{url_for('static', filename='assets/bundles/libscripts.bundle.js')}}"></script>
+
+{% endblock %}

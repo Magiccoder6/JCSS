@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from flask import Blueprint, g, jsonify, request, session
 from db import get_db
 from helper import result_to_dict
@@ -22,6 +23,7 @@ def add_appoinment():
     date = request.form['date']
     db = get_db()
     
+    appointments = db.execute(f"SELECT * FROM appointments WHERE doctor_id = '{doctor_id}'").fetchall()
     previous_appointment = db.execute(f"SELECT * FROM appointments WHERE patient_id = {session['user_id']}").fetchone()
 
     if previous_appointment is not None: # if there are previous appointment remove it and free up the room
@@ -29,6 +31,18 @@ def add_appoinment():
 
         if previous_appointment['room_id'] is not None:
             db.execute(f"UPDATE rooms SET is_occupied = false WHERE id = {previous_appointment['room_id']};")
+        
+
+    #Check if there is a clash with other dates
+    
+    for appointment in appointments:
+        duration = datetime.strptime("00:20", '%H:%M')
+        temp_date = datetime.strptime(appointment['date'], '%Y/%m/%d %H:%M %Z') 
+        requested_date = datetime.strptime(date, '%Y/%m/%d %H:%M %Z')
+
+        if requested_date == temp_date:
+            return jsonify({'message': 'This requested date was already taken, please try again.'}), 400
+            
 
     try:
         db.execute("INSERT INTO appointments (doctor_id, patient_id, date) VALUES (?,?,?)", (doctor_id, session['user_id'], date,))

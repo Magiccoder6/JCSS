@@ -39,18 +39,21 @@ def register():
 
 @app.route("/appointments", methods=('GET', 'POST'))
 def appointments():
+    user_id = str(g.user['id'])
     data = []
 
     db = get_db()
     appointments = db.execute("SELECT * FROM appointments").fetchall()
     for a in appointments:
         user = db.execute(f"SELECT * FROM users where id = {a['patient_id']}").fetchone()
-        temp = {'user_id':user['id'], 'id': a['id'],'age': calculate_age(user['dob']), 'patient_name': f"{user['first_name']} {user['last_name']}", 'date_admitted': a['date_admitted'], 'date_discharged': a['date_dischared'], 'status': a['status'],'progress': a['progress'],'schedule_date': a['date'], 'style_width': f"style=width: {a['progress']}%;"}
+        temp = {'user_id':user['id'],'doctor_id': a['doctor_id'], 'id': a['id'],'age': calculate_age(user['dob']), 'patient_name': f"{user['first_name']} {user['last_name']}", 'date_admitted': a['date_admitted'], 'date_discharged': a['date_dischared'], 'status': a['status'],'progress': a['progress'],'schedule_date': a['date'], 'style_width': f"style=width: {a['progress']}%;"}
         data.append(temp)
     
     if g.user['user_role'] == 'PATIENT':
-        data = [x for x in data if x['user_id'] == g.user['id']]
-    
+        data = [x for x in data if str(x['user_id']) == user_id]
+    else:
+        data = [v for v in data if str(v['doctor_id']) == user_id]
+
     return render_template("appointments.html", data=data)
 
 @app.route('/logout')

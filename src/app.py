@@ -16,6 +16,7 @@ init_app(app)
 def index():
     db = get_db()
     users = db.execute("SELECT * FROM users").fetchall()
+    notifications = db.execute(f"SELECT * FROM notifications WHERE user_id = '{g.user['id']}'").fetchall()
     data = {'patients': 0, 'doctors': 0, 'nurses': 0, 'doctors_data':[], 'patients_data': [], 'rooms':db.execute("SELECT * FROM rooms").fetchall()}
 
     for user in users:
@@ -27,7 +28,7 @@ def index():
         elif user['user_role'] == 'PATIENT':
             data['patients']+=1
             data['patients_data'].append(user)
-    return render_template("index.html", data=data)
+    return render_template("index.html", data=data, notifications=notifications)
 
 @app.route("/")
 def signin():
@@ -40,12 +41,15 @@ def register():
 @app.route("/doctors", methods=('GET', 'POST'))
 def doctors():
     db = get_db()
+    notifications = db.execute(f"SELECT * FROM notifications WHERE user_id = '{g.user['id']}'").fetchall()
     users = db.execute("SELECT * FROM users WHERE user_role != 'PATIENT'").fetchall()
-    return render_template("doctors.html", data=users)
+    return render_template("doctors.html", data=users, notifications=notifications)
 
 @app.route("/schedule", methods=('GET', 'POST'))
 def schedule():
-    return render_template("schedule.html")
+    db=get_db()
+    notifications = db.execute(f"SELECT * FROM notifications WHERE user_id = '{g.user['id']}'").fetchall()
+    return render_template("schedule.html", notifications=notifications)
 
 @app.route("/appointments", methods=('GET', 'POST'))
 def appointments():
@@ -54,6 +58,7 @@ def appointments():
 
     db = get_db()
     appointments = db.execute("SELECT * FROM appointments").fetchall()
+    notifications = db.execute(f"SELECT * FROM notifications WHERE user_id = '{g.user['id']}'").fetchall()
     for a in appointments:
         user = db.execute(f"SELECT * FROM users where id = {a['patient_id']}").fetchone()
         temp = {'user_id':user['id'],'doctor_id': a['doctor_id'], 'id': a['id'],'age': calculate_age(user['dob']), 'patient_name': f"{user['first_name']} {user['last_name']}", 'date_admitted': a['date_admitted'], 'date_discharged': a['date_dischared'], 'status': a['status'],'progress': a['progress'],'schedule_date': a['date'], 'style_width': f"style=width: {a['progress']}%;"}
@@ -64,7 +69,7 @@ def appointments():
     else:
         data = [v for v in data if str(v['doctor_id']) == user_id]
 
-    return render_template("appointments.html", data=data)
+    return render_template("appointments.html", data=data, notifications=notifications)
 
 @app.route('/logout')
 def logout():

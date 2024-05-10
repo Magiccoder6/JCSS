@@ -36,7 +36,6 @@ def add_appoinment():
     #Check if there is a clash with other dates
     
     for appointment in appointments:
-        duration = datetime.strptime("00:20", '%H:%M')
         temp_date = datetime.strptime(appointment['date'], '%Y/%m/%d %H:%M %Z') 
         requested_date = datetime.strptime(date, '%Y/%m/%d %H:%M %Z')
 
@@ -54,3 +53,19 @@ def add_appoinment():
     except Exception as e:
         return jsonify({"message": e.__str__()}), 400
         
+@bp.route('/dashboard/get_schedules', methods=('GET', 'POST'))
+def get_schedules():
+    user_id = g.user["id"]
+    db = get_db()
+    schedules = db.execute(f"SELECT * FROM appointments WHERE doctor_id = '{user_id}'").fetchall()
+
+    if g.user['user_role'] == "ADMIN":
+        schedules = db.execute(f"SELECT * FROM appointments").fetchall()
+
+    for schedule in schedules:
+        user = db.execute(f"SELECT * FROM users WHERE id = '{schedule['patient_id']}'").fetchone()
+        if user is not None:
+            schedule['patient'] = f"{user['first_name']} {user['last_name']}"
+    
+    return jsonify({"message": schedules}), 200
+

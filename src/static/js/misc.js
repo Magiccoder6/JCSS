@@ -39,3 +39,15 @@ export function callAPI(requestType, endpoint, formData){
 }
 
 export const STATUS = ['PENDING','ADMIT','INPROGRESS','DISCHARGE']
+
+export function getRandomColor() {
+    // Generate random values for red, green, and blue components
+    let red = Math.floor(Math.random() * 256); // Random integer between 0 and 255
+    let green = Math.floor(Math.random() * 256);
+    let blue = Math.floor(Math.random() * 256);
+
+    // Construct the RGB color string
+    let color = `rgb(${red}, ${green}, ${blue})`;
+
+    return color;
+}

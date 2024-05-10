@@ -37,6 +37,16 @@ def signin():
 def register():
     return render_template("signup.html")
 
+@app.route("/doctors", methods=('GET', 'POST'))
+def doctors():
+    db = get_db()
+    users = db.execute("SELECT * FROM users WHERE user_role != 'PATIENT'").fetchall()
+    return render_template("doctors.html", data=users)
+
+@app.route("/schedule", methods=('GET', 'POST'))
+def schedule():
+    return render_template("schedule.html")
+
 @app.route("/appointments", methods=('GET', 'POST'))
 def appointments():
     user_id = str(g.user['id'])

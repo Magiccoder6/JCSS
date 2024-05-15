@@ -4,41 +4,38 @@
             <span class="logo-icon">
                 <i class="icofont-heart-beat fs-2"></i>
             </span>
-            <span class="logo-text">JSCC</span>
+            <span class="logo-text">JCSS</span><br>
         </a>
         <!-- Menu: main ul -->
 
         <ul class="menu-list flex-grow-1 mt-3">
             <li class="collapsed">
             <a class="m-link active" data-bs-toggle="collapse" data-bs-target="#dashboard" href="#">
-            <i class="icofont-ui-home fs-5"></i> <span>Dashboard</span> <span class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a>
-            <!-- Menu: Sub menu ul -->
-                <ul class="sub-menu collapse show" id="dashboard">
-                    <li><a class="ms-link active" href="{{ url_for('index')}}">Hospital Dashboard</a></li>
-                </ul>
-            </li>
+            <li><a class="m-link active" href="{{ url_for('index')}}"><i class="icofont-ui-home fs-5"></i> <span>Dashboard</span></a></li>
             <li><a class="m-link" href="virtual.html"><i class="icofont-ui-video-chat fs-5"></i> <span>JSCC Virtual</span></a></li>
             <li><a class="m-link" href="{{ url_for('appointments')}}"><i class="icofont-stretcher fs-5"></i> <span>Appointments</span></a></li>
-            {% if g.user.user_role == 'DOCTOR' or g.user.user_role == 'NURSE' %}
+            {% if g.user.user_role == 'DOCTOR' or g.user.user_role == 'NURSE' or g.user.user_role == 'ADMINISTRATOR'%}
             <li class="collapsed">
                 <a class="m-link" data-bs-toggle="collapse" data-bs-target="#menu-Doctor" href="#">
-                    <i class="icofont-doctor-alt fs-5"></i>  <span>Doctor</span> <span class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a>
+                    <i class="icofont-doctor-alt fs-5"></i>  <span>Health Professional</span> <span class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a>
                     <!-- Menu: Sub menu ul -->
                     <ul class="sub-menu collapse" id="menu-Doctor">
-                        <li><a class="ms-link" href="{{ url_for('doctors')}}">All Doctors</a></li>
-                        <li><a class="ms-link" href="{{ url_for('schedule')}}">Doctor Schedule</a></li>
+                        <li><a class="ms-link" href="{{ url_for('doctors')}}">All Health Professionals</a></li>
+                        <li><a class="ms-link" href="{{ url_for('add_health_professional')}}">Add Health Professionals</a></li>
+                        <li><a class="ms-link" href="{{ url_for('schedule')}}">Schedule</a></li>
                     </ul>
             </li>
             {% endif %}
-
+            {% if g.user.user_role != 'PATIENT'%}
             <li class="collapsed">
                 <a class="m-link" data-bs-toggle="collapse" data-bs-target="#menu-Patient" href="#">
                 <i class="icofont-blind fs-5"></i> <span>Patient</span> <span class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a>
                 <!-- Menu: Sub menu ul -->
                 <ul class="sub-menu collapse" id="menu-Patient">
-                    <li><a class="ms-link" href="patient-list.html">Patient List</a></li>
+                    <li><a class="ms-link" href="{{ url_for('patients')}}">Patient List</a></li>
                 </ul>
             </li>
+            {% endif %}
             <li class="collapsed">
                 <a class="m-link" data-bs-toggle="collapse" data-bs-target="#app" href="#">
                 <i class="icofont-code-alt fs-5"></i> <span>Interactions</span> <span class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a>

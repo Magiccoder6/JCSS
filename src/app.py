@@ -34,6 +34,15 @@ def index():
 def signin():
     return render_template("auth-signin.html")
 
+@app.route("/add-health-professional")
+def add_health_professional():
+    return render_template("add-health-professional.html")
+
+@app.route("/patients", methods=('GET', 'POST'))
+def patients():
+    users = get_db().execute("SELECT * FROM users WHERE user_role == 'PATIENT'").fetchall()
+    return render_template("patients.html", data=users)
+
 @app.route("/register", methods=('GET', 'POST'))
 def register():
     return render_template("signup.html")
@@ -42,7 +51,7 @@ def register():
 def doctors():
     db = get_db()
     notifications = db.execute(f"SELECT * FROM notifications WHERE user_id = '{g.user['id']}'").fetchall()
-    users = db.execute("SELECT * FROM users WHERE user_role != 'PATIENT'").fetchall()
+    users = db.execute("SELECT * FROM users WHERE user_role != 'PATIENT' and user_role != 'ADMINISTRATOR'").fetchall()
     return render_template("doctors.html", data=users, notifications=notifications)
 
 @app.route("/schedule", methods=('GET', 'POST'))
@@ -67,7 +76,8 @@ def appointments():
     if g.user['user_role'] == 'PATIENT':
         data = [x for x in data if str(x['user_id']) == user_id]
     else:
-        data = [v for v in data if str(v['doctor_id']) == user_id]
+        if g.user['user_role'] != 'ADMINISTRATOR':
+            data = [v for v in data if str(v['doctor_id']) == user_id]
 
     return render_template("appointments.html", data=data, notifications=notifications)
 

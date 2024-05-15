@@ -89,7 +89,7 @@
                 </div>
                 
                 <div class="col-md-12 col-lg-8 col-xl-8">
-                    {% if g.user.user_role != 'PATIENT' %}
+                    {% if g.user.user_role == 'ADMINISTRATOR' %}
                     <div class="card">
                         <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
                             <h6 class="mb-0 fw-bold ">Patient Statistics</h6>
@@ -149,7 +149,7 @@
                                         <option value={{doctor.id}}>Dr. {{doctor.first_name}} {{doctor.last_name}}</option>
                                         {% endfor %}
                                     </select>
-                                    <button type="submit" class="btn btn-primary disabled request"> Request appointment <span>On</span>
+                                    <button type="submit" class="btn btn-primary disabled request"> Schedule appointment <span>On</span>
                                         <span class="day fw-bold text-dark"></span>
                                         <span>At</span>
                                         <span class="time fw-bold text-dark"></span>
@@ -161,11 +161,48 @@
                         </div>
                     </div>
                     {% endif %}
+
+                    {% if g.user.user_role == 'DOCTOR' %}
+                    <div class="card bg-secondary position-relative">
+                        <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                            <h6 class="mb-0 fw-bold text-white ">Doctor Of the Month</h6>  
+                        </div>
+                        <div class="card-body text-center p-4 text-white">
+                            <img src="{{url_for('static', filename='assets/images/profile.png')}}" alt="" class="rounded-circle mb-3 img-thumbnail avatar xl shadow-sm">
+                            <div class="d-flex align-items-center justify-content-center">
+                                <span class="mb-2 me-3">
+                                    <a href="#" class="rating-link active"><i class="bi bi-star text-primary"></i></a>
+                                    <a href="#" class="rating-link active"><i class="bi bi-star text-primary"></i></a>
+                                    <a href="#" class="rating-link active"><i class="bi bi-star text-primary"></i></a>
+                                    <a href="#" class="rating-link active"><i class="bi bi-star text-primary"></i></a>
+                                    <a href="#" class="rating-link active"><i class="bi bi-star text-primary"></i></a>
+                                </span>
+                            </div>
+                            <h5 class="mb-0">PENDING...</h5><span class="small">...</span>
+                            <div class="d-flex justify-content-center pt-3">
+                                <div class="opration d-flex justify-content-start align-content-center p-3">
+                                    <i class="icofont-operation-theater fs-1"></i> 
+                                    <div class="opt_ineer text-start ps-3">
+                                        <span class="d-block">0</span>
+                                        <span class="d-block">Operations</span>
+                                    </div>
+                                </div>
+                                <div class="pations-visit d-flex justify-content-start align-content-center p-3 border-start">
+                                    <i class="icofont-crutch fs-1"></i>
+                                    <div class="opt_ineer text-start ps-3">
+                                        <span class="d-block">0</span>
+                                        <span class="d-block">Patients</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
                 </div>
                 
             </div>
 
-            {% if g.user.user_role != 'PATIENT' %}
+            {% if g.user.user_role == 'ADMINISTRATOR' %}
             <div class="row g-3 mb-3 row-deck">
                 <div class="col-lg-12 col-xl-6">
                     <div class="card">
@@ -214,26 +251,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-12 col-xl-6">
-                    <div class="card">
-                        <div class="card-header py-3 d-flex  bg-transparent border-bottom-0">
-                            <h6 class="mb-0 fw-bold ">Hospital Room Booking Status</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="room_book">
-                                <div class="row row-cols-2 row-cols-sm-4 row-cols-md-6 row-cols-lg-6 g-3">
-                                    {% for room in data.rooms %}
-                                        <div class="room col">
-                                            <input type="checkbox" id={{room.id}} checked/>
-                                            <label for={{room.id}}><i class="icofont-patient-bed fs-2"></i><span class="text-muted">{{room.room_id}}</span></label>
-                                        </div>
-                                    {% endfor %}
-                                </div>
-                            </div>
-                        </div>  
-                        <button data-bs-toggle="modal" data-bs-target="#exampleModalLive" class="btn btn-primary border-0 rounded m-2">Add Room</button>
-                    </div>
-                </div>
             </div>
             <div class="row g-3 mb-3">
                 <div class="col-xl-8 col-lg-12 flex-column">
@@ -280,7 +297,6 @@
                     </div>
                 </div>
                 <div class="col-xl-4 col-lg-12 flex-column">
-                    
                     <div class="card bg-secondary position-relative">
                         <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
                             <h6 class="mb-0 fw-bold text-white ">Doctor Of the Month</h6>  

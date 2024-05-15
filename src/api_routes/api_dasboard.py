@@ -57,9 +57,10 @@ def add_appoinment():
 def get_schedules():
     user_id = g.user["id"]
     db = get_db()
+    
     schedules = db.execute(f"SELECT * FROM appointments WHERE doctor_id = '{user_id}'").fetchall()
 
-    if g.user['user_role'] == "ADMIN":
+    if g.user['user_role'] == "ADMINISTRATOR":
         schedules = db.execute(f"SELECT * FROM appointments").fetchall()
 
     for schedule in schedules:

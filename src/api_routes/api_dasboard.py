@@ -1,9 +1,31 @@
 from datetime import datetime, timedelta
 from flask import Blueprint, g, jsonify, request, session
 from db import get_db
-from helper import result_to_dict
+from werkzeug.security import check_password_hash, generate_password_hash
 
 bp = Blueprint('dashboard', __name__, url_prefix='/api')
+
+@bp.route('/dashboard/add_health_professional', methods=('GET', 'POST'))
+def add_health_professional():
+    first_name = request.form['first_name']
+    last_name = request.form['last_name']
+    email = request.form['email']
+    phone_number = request.form['phone_number']
+    gender = request.form['gender']
+    password = request.form['passcode']
+    user_role = request.form['user_role']
+    db = get_db()
+    
+    try:
+        db.execute(
+        "INSERT INTO users (first_name, last_name, email, phone_number, gender, dob, passcode, user_role) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+        (first_name, last_name, email, phone_number, gender, datetime.today(), generate_password_hash(password), user_role),
+        )
+        db.commit()
+    except Exception as e:
+        return jsonify({"message": e.__str__()}), 400
+    
+    return jsonify({"message": "Healthcare professional was added successfully!!"}), 200
 
 @bp.route('/dashboard/add_room', methods=('GET', 'POST'))
 def load_dashboard():
@@ -24,15 +46,7 @@ def add_appoinment():
     db = get_db()
     
     appointments = db.execute(f"SELECT * FROM appointments WHERE doctor_id = '{doctor_id}'").fetchall()
-    previous_appointment = db.execute(f"SELECT * FROM appointments WHERE patient_id = {session['user_id']}").fetchone()
-
-    if previous_appointment is not None: # if there are previous appointment remove it and free up the room
-        db.execute(f"DELETE FROM appointments WHERE patient_id = '{session['user_id']}'")
-
-        if previous_appointment['room_id'] is not None:
-            db.execute(f"UPDATE rooms SET is_occupied = false WHERE id = {previous_appointment['room_id']};")
         
-
     #Check if there is a clash with other dates
     
     for appointment in appointments:
@@ -41,6 +55,9 @@ def add_appoinment():
 
         if requested_date == temp_date:
             return jsonify({'message': 'This requested date was already taken, please try again.'}), 400
+        
+    print(temp_date)
+    print(requested_date)
             
 
     try:

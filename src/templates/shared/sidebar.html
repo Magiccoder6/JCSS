@@ -21,7 +21,9 @@
                     <!-- Menu: Sub menu ul -->
                     <ul class="sub-menu collapse" id="menu-Doctor">
                         <li><a class="ms-link" href="{{ url_for('doctors')}}">All Health Professionals</a></li>
+                        {% if g.user.user_role == 'ADMINISTRATOR'%}
                         <li><a class="ms-link" href="{{ url_for('add_health_professional')}}">Add Health Professionals</a></li>
+                        {% endif %}
                         <li><a class="ms-link" href="{{ url_for('schedule')}}">Schedule</a></li>
                     </ul>
             </li>

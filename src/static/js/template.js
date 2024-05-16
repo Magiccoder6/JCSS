@@ -170,8 +170,11 @@ $(function() {
             localStorage.setItem('theme', 'light');
         }  
     }
-    toggleSwitch.addEventListener('change', switchTheme, false);
-    toggleHcSwitch.addEventListener('change', switchHc, false);
+    if(toggleSwitch!=null){
+        toggleSwitch.addEventListener('change', switchTheme, false);
+        toggleHcSwitch.addEventListener('change', switchHc, false);
+    }
+    
 });
 
 $(function() {
